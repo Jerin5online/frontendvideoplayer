@@ -4,7 +4,7 @@ import Modal from 'react-bootstrap/Modal';
 import { useState } from 'react';
 import { addToHistory, deleteAVideo } from '../services/allAPI';
 
-function VideoCard({displayVideo,setDeleteAVideoStatus}) {
+function VideoCard({displayVideo,setDeleteAVideo,isPresent}) {
 
   const [show, setShow] = useState(false);
 
@@ -24,11 +24,11 @@ function VideoCard({displayVideo,setDeleteAVideoStatus}) {
   }
   const removeVideo = async(id)=>{
   const response = await deleteAVideo(id)
-  setDeleteAVideoStatus(true)
+  setDeleteAVideo(true)
 
   }
 
-  //function todrag the videocard
+  //function to drag the videocard
 
   const cardDrag = (e,id) =>{
     console.log(`The id of the videocard dragged is ${id}`);
@@ -42,8 +42,8 @@ function VideoCard({displayVideo,setDeleteAVideoStatus}) {
               <Card.Body>
                 <Card.Title className='d-flex justify-content-between align-items-center'>
                     <h6>{displayVideo.caption}</h6>
-                    <button onClick={()=>removeVideo(displayVideo?.id)} className='btn fs-4x text-white btn-danger '><i class="fa-solid fa-trash "></i></button>
-                </Card.Title>
+     {!isPresent?<button onClick={()=>removeVideo(displayVideo?.id)} className='btn fs-4x text-white btn-danger '><i class="fa-solid fa-trash "></i></button>:
+     <button onClick={()=>removeVideo(displayVideo?.id)} className='btn fs-4x text-white btn-warning '><i class="fa-solid fa-trash "></i></button>} </Card.Title>
               </Card.Body>
             </Card>
 

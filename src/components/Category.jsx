@@ -3,8 +3,8 @@ import { useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import Form from 'react-bootstrap/Form'
-import { addAllCategory, deletecategory, getAVideo, getAllCategories, updateCategory } from '../services/allAPI';
-import { toast } from 'react-toastify';
+import { addAllCategory,deleteCategory, getAVideo, getAllCategories, updateCategory, } from '../services/allAPI';
+import { ToastContainer, toast } from 'react-toastify';
 import VideoCard from './VideoCard';
 import { Col, Row } from 'react-bootstrap';
 
@@ -41,7 +41,6 @@ function Category() {
       toast.error("Something went wrong please try again")
     }
     
-    
   }
     else{
       toast.warning("Enter Category Name ")
@@ -58,9 +57,8 @@ function Category() {
 
   //function to delete Category
 
-  const deleteAcategory = async(id)=>{
-    await deletecategory(id)
-    //to get the remaining categories
+  const deleteACategory=async(id)=>{
+    await deleteCategory(id)
     allCategory()
   }
 
@@ -70,13 +68,13 @@ function Category() {
     e.preventDefault()
   }
   const videoDrop = async(e,categoryId)=>{
-    console.log(`droppped on the category id :${categoryId}`);
+    console.log('droppped on the category id :',categoryId);
 
   //to get the data from videocard
 
    let videoId = e.dataTransfer.getData("videoID")
    console.log(videoId);
-   const data = await getAVideo(videoId)
+   const {data} = await getAVideo(videoId)
    console.log(data);
    const selectedCategory = category.find(item=>item.id===categoryId)
    selectedCategory.allvideos.push(data)
@@ -95,19 +93,20 @@ function Category() {
        
         </div>
          {category?.length>0?
-        category?.map((item)=>(<div className='d-flex justify-content-between p-3 rounded' droppable onDragOver={(e)=>dragOver(e)}onDrop={(e)=>videoDrop(e,item?.id)}>
+        category?.map((item)=>(<div className='m-5 border border-secondary  p-3 rounded'>
+          <div className='d-flex justify-content-between p-3 rounded align-items-center' droppable onDragOver={(e)=>dragOver(e)}onDrop={(e)=>videoDrop(e,item?.id)}>
           <h6 className='text-white mt-2 ms-3' style={{fontFamily:"serif",fontSize:"20px"}}>{item.categoryName}</h6>
-          <button onClick={()=>deleteAcategory(item?.id)} className='btn btn-danger'><i class="fa-solid fa-trash"></i></button>
-          <Row>
+<Button onClick={()=>deleteACategory(item?.id)} className='btn btn-danger '><i class="fa-solid fa-trash "></i></Button>          </div>
+           <Row>
             <Col>
-            {item?.allvideos?.length>0?
-            item?.allvideos?.map(card=>(<VideoCard displayVideo={card}/>))
-            : <p>Nothing to display</p>}
+            {item?.allvideos.length>0?
+            item?.allvideos?.map(card=>(<VideoCard displayVideo={card} isPresent={true}/>))
+            : <p>Nothing to Display</p>}
             
             </Col>
-          </Row>
+           </Row>
         </div>))
-        : <p className='ms-3 mt-2 text-whiteul'>No Category</p>
+        : <p className='ms-3 mt-2 text-white'>No Category</p>
        } 
       <Modal
         show={show}
@@ -138,9 +137,12 @@ function Category() {
           <Button variant="warning" onClick={addCategory}>Add</Button>
         </Modal.Footer>
       </Modal>
+      <ToastContainer position='top-center' theme='colored' autoClose={2000}/>
 
-    </>
+</>
   )
 }
 
 export default Category
+
+

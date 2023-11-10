@@ -53,11 +53,11 @@ return await commonAPI('GET',`${serverURL}/category`,{})
 
 //API to delete categories from JSON server
 
-export const deletecategory = async(id)=>{
+export const deleteCategory = async(id)=>{
 return await commonAPI('DELETE',`${serverURL}/category/${id}`,{})
 }
 
-// to get a particular video from localhost/3000/videos
+// to get a particular video from localhost/4001/videos
 
 export const getAVideo = async(id)=>{
 return await commonAPI('GET',`${serverURL}/video/${id}`,"")
